@@ -1,11 +1,14 @@
 \documentclass[a4paper, 12pt]{scrartcl}
 
+% Use Hungarian Locale
 \usepackage[magyar]{babel}
 
+% Page layout settings
 \usepackage[
   margin=20mm,
   footskip=12mm,
   headheight=20mm,
+  % showframe
 ]{geometry}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
@@ -26,6 +29,7 @@
   C7XUDE
 }
 
+% Math related packages
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{fontspec}
@@ -41,18 +45,22 @@
   locale=DE
 }
 
-
+% Vector graphics
 \usepackage{tikz}
 \input{tikzset}
 
+% Figure and other imports
 \usepackage{pdfpages}
 \usepackage{standalone}
-\usepackage{float}
 
+% Other dependencies
+\usepackage{tabto}
 \usepackage{multicol}
 \usepackage{xcolor}
+\usepackage{float}
 \usepackage{array}
 \newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{X}[1]{>{$}x{#1}<{$}}
 
 \input{code} % 1112
 
@@ -64,6 +72,7 @@
 
 \DeclareMathOperator\atann{atan2}
 
+% Document begins here
 \begin{document}
 
 \input{titlepage}
@@ -71,7 +80,8 @@
 \section{Méretarányos ábra} % (fold)
 \label{sec:Méretarányos ábra}
 
-A feladatkódom (\texttt{1112}) alapján a szerkezetet jellemző adatok:
+A feladatkódom (\texttt{\lv{code_1}\lv{code_2}\lv{code_3}\lv{code_4}})
+alapján a szerkezetet jellemző adatok:
 \begin{multicols}{3}
   \begin{itemize}
     \item $a = \silv{a}{m}$,
@@ -112,9 +122,9 @@ hozzárendelt sorszámokat a \ref{fig:numbering}. ábra tartalmazza.
   \label{fig:numbering}
 \end{figure}
 
-Határozzuk meg először az elemi merevségi mátrixokat. Ezen mátrixok 2D-s
+Határozzuk meg először az elemi merevségi mátrixokat. Egy ilyen mátrix 2D-s
 húzott-nyomott rudak esetén az alábbi alakban írhatóak fel:
-\def\a{\alpha}
+\def\a{\alpha_i}
 \begin{equation}
   \rmat{K}_e^{(i)}
   = \frac{A_i E_i}{L_i}
@@ -127,6 +137,8 @@ húzott-nyomott rudak esetén az alábbi alakban írhatóak fel:
   \end{bmatrix}.
   \label{eq:Ke}
 \end{equation}
+\let\a\relax
+\def\a{\alpha}
 
 A rudak rugalmassági modulusai ($E_i = E$) már ismertek, viszont $L_i$ hosszuk,
 $A_i$ keresztmetszetük, valamint $\alpha_i$ hajlásszögük még nem.
@@ -176,6 +188,10 @@ Az egyes elemek merevségi mátrixai ezen információk alapján már számítha
   round-precision = 4
 }
 \begin{equation}
+  \sisetup{
+    exponent-mode = fixed,
+    round-precision = 4
+  }
   \begin{split}
     \directlua{utils.fullKei()}
   \end{split}
@@ -188,7 +204,6 @@ mátrix tartalmazza:
 
 \begin{equation}
   \directlua{utils.printDOFMatrix()}
-  .
   \label{eq:DOF}
 \end{equation}
 
@@ -207,24 +222,29 @@ A globális merevségi mátrix tehát az alábbi alakot veszi fel:
   round-precision = 2
 }
 \begin{equation}
+  \sisetup{
+    exponent-mode = fixed,
+    round-precision = 5
+  }
   \scriptsize{
     \rmat K = \begin{bmatrix}
-      \directlua{utils.printK()}
-    \end{bmatrix} \mathrm{\frac{N}{m}}
+      \directlua{utils.printK(1e-6)}
+    \end{bmatrix} \cdot 10^6 \, \mathrm{N/m}
   }.
+  \normalsize
   \label{eq:K}
 \end{equation}
 
-A merevségi egyenlet felírásához írjuk fel paraméteresen a A globális csomóponti
+A merevségi egyenlet felírásához írjuk fel paraméteresen a globális csomóponti
 elmozdulásvektort, illetve a globális csomóponti terhelésvektort:
 \begin{equation}
   \begin{array}{r c}
-    \rvec{U} = & \left[ \begin{array}{*{10}{>{$}x{6mm}<{$}}}
+    \rvec{U} = & \left[ \begin{array}{*{10}{X{6mm}}}
                             U_1 & V_1 & U_2 & V_2 & U_3 & V_3 & U_4 & V_4 & U_5 & V_5
                           \end{array}
       \right]^\mathsf{T}\text{,}
     \\[2mm]
-    \rvec{F} = & \left[ \begin{array}{*{10}{>{$}x{6mm}<{$}}}
+    \rvec{F} = & \left[ \begin{array}{*{10}{X{6mm}}}
                             F_{1x} & F_{1y} & F_{2x} & F_{2y} & F_{3x} & F_{3y} & F_{4x} & F_{4y} & F_{5x} & F_{5y}
                           \end{array}
       \right]^\mathsf{T}.
@@ -233,10 +253,11 @@ elmozdulásvektort, illetve a globális csomóponti terhelésvektort:
 \end{equation}
 
 A kényszerek ismeretében tudjuk, hogy az (1)-es csomópont elmozdulása $y$,
-(3)-as csomópont elmozdulás $x$, a (4)-es csomópont elmozdulása $x$ és $y$
-irányban is gátolt, vagyis: $V_1 = U_3 = U_4 = V_4 = 0$. Behelyettesítve:
+(3)-as csomópont elmozdulása $x$, a (4)-es csomópont elmozdulása pedig $x$
+és $y$ irányban is gátolt, vagyis: $V_1 = U_3 = U_4 = V_4 = 0$.
+Behelyettesítve:
 \begin{equation}
-  \rvec U = \left[\begin{array}{*{10}{>{$}x{6mm}<{$}}}
+  \rvec U = \left[\begin{array}{*{10}{X{6mm}}}
       U_1 & 0 & U_2 & V_2 & 0 & V_3 & 0 & 0 & U_5 & V_5
     \end{array}\right]^\mathsf{T}
   .
@@ -248,7 +269,7 @@ $F_{2y} = -3 F_1$, $F_{3y} = F_1$, $F_{5y} = F_1$. Tudjuk továbbá hogy
 $F_{1x} = F_{2x} = F_{5x} = 0$, hiszen ezek a csomópontok ilyen irányban
 terheletlenek:
 \begin{equation}
-  \rvec F = \left[\begin{array}{*{10}{>{$}x{7.75mm}<{$}}}
+  \rvec F = \left[\begin{array}{*{10}{X{7.75mm}}}
       0 & F_{1y} & 0 & \text{-}3F_1 & F_{3x} & F_1 & F_{4x} & F_{4y} & 0 & F_1
     \end{array}\right]^\mathsf{T}
   .
@@ -266,6 +287,10 @@ melyet úgy kapunk meg, hogy az elmozdulásban gátolt irányokhoz tartozó soro
       U_1 \\ U_2 \\ V_2 \\ V_3 \\ U_5 \\ V_5
     \end{bmatrix}}_{\widehat{\rvec U}}
   =
+  \sisetup{
+    exponent-mode = fixed,
+    round-precision = 3
+  }
   \underbrace{\begin{bmatrix}
       \directlua{utils.printFkond()}
     \end{bmatrix}}_{\widehat{\rvec F}}
@@ -280,6 +305,10 @@ mátrix-invertálással megoldható, vagyis:
   \underbrace{\begin{bmatrix}
       \directlua{utils.printInverted()}
     \end{bmatrix}}_{\widehat{\rmat K}^{-1}}
+  \sisetup{
+    exponent-mode = fixed,
+    round-precision = 3
+  }
   \underbrace{\begin{bmatrix}
       \directlua{utils.printFkond()}
     \end{bmatrix}}_{\widehat{\rvec F}}
@@ -288,15 +317,13 @@ mátrix-invertálással megoldható, vagyis:
 \end{equation}
 
 Az egyenlet megoldása numerikusan:
+\sisetup{round-precision = 3}
 \begin{equation}
   \widehat{\rvec U} = \begin{bmatrix}
     \directlua{utils.printUkond(1)}
   \end{bmatrix} \, \mathrm{m}
   =
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 3
-  }
+  \sisetup{exponent-mode = fixed}
   \begin{bmatrix}
     \directlua{utils.printUkond(1000)}
   \end{bmatrix} \, \mathrm{mm}.
@@ -363,7 +390,7 @@ akkor megkaphatjuk a terhelési vektort numerikusan:
   \underbrace{\begin{bmatrix}
       \directlua{utils.printFreacc(1)}
     \end{bmatrix}}_\text{reakció}
-  \, \mathrm{N}
+  \, \mathrm{N}.
   \label{eq:Fcalc}
 \end{equation}
 
@@ -374,9 +401,9 @@ A reakcióerők tehát a következőek:
     round-precision = 3
   }
   \begin{split}
-    F_{3x} &= \simat{Fcalc}{N}{5}{1},
+    F_{3x} &= \simat{Fcalc}{N}{5}{1}\text,
     \\
-    F_{4x} &= \simat{Fcalc}{N}{7}{1},
+    F_{4x} &= \simat{Fcalc}{N}{7}{1}\text,
     \\
     F_{4y} &= \simat{Fcalc}{N}{8}{1}.
   \end{split}
@@ -399,12 +426,12 @@ melyek elemei a globális elmozdulásvektor megfelelő elemeivel egyeznek meg:
 
 Az alakváltozások számításához definiáljuk a $\rvec B$ sorvektort az alábbi módon:
 \begin{equation}
-  \rvec B_i := \frac{1}{L_i} \begin{bmatrix}
-    -\cos \a_i
-    -\sin \a_i
-    \cos \a_i
-    \sin \a_i
-  \end{bmatrix}.
+  \rvec B_i := \frac{1}{L_i} \left[\begin{array}{*{4}{X{14mm}}}
+      -\cos \a_i &
+      -\sin \a_i &
+      \cos \a_i  &
+      \sin \a_i
+    \end{array}\right].
   \label{eq:B}
 \end{equation}
 
@@ -417,17 +444,17 @@ az alábbi egyenlettel írható fel:
 
 \sisetup{
   exponent-mode = fixed,
-  round-precision = 6
+  round-precision = 4
 }
 Ezen értékek numerikusan:
 \begin{multicols}{3}
   \begin{itemize}
     \item $\varepsilon_1 = \varepsilon_2 = 0,$
-    \item $\varepsilon_3 = \sivec{epsilon}{}{3}$,
-    \item $\varepsilon_4 = \sivec{epsilon}{}{4}$,
-    \item $\varepsilon_5 = \sivec{epsilon}{}{5}$,
-    \item $\varepsilon_6 = \sivec{epsilon}{}{6}$,
-    \item $\varepsilon_7 = \sivec{epsilon}{}{7}$.
+    \item $\varepsilon_3 = \sivec{epsilon}{}{3}[6]$,
+    \item $\varepsilon_4 = \sivec{epsilon}{}{4}[6]$,
+    \item $\varepsilon_5 = \sivec{epsilon}{}{5}[6]$,
+    \item $\varepsilon_6 = \sivec{epsilon}{}{6}[6]$,
+    \item $\varepsilon_7 = \sivec{epsilon}{}{7}[6]$.
   \end{itemize}
 \end{multicols}
 
@@ -438,6 +465,7 @@ kapcsolatot:
   \label{eq:Hooke}
 \end{equation}
 
+\sisetup{round-precision = 4}
 A feszültségek numerikusan:
 \begin{multicols}{3}
   \begin{itemize}
@@ -451,5 +479,35 @@ A feszültségek numerikusan:
 \end{multicols}
 
 % section section name (end)
+
+% \clearpage
+
+% \tableofcontents
+
+\vfill
+
+\section*{Felhasznált szoftverek}
+
+\begin{itemize}
+  \item \href{https://neovim.io}{\texttt{Neovim}}
+        \tabto{3.9cm} – \tabto{4.7cm}
+        Open Source szövegszerkesztő
+
+  \item \texttt{Lua\LaTeX}
+        \tabto{3.9cm} – \tabto{4.7cm}
+        \LaTeX{} fordító
+
+  \item \texttt{Ti\textit{k}Z}
+        \tabto{3.9cm} – \tabto{4.7cm}
+        Vektorgrafika
+
+  \item \texttt{lua}
+        \tabto{3.9cm} – \tabto{4.7cm}
+        Számítások elvégzése
+\end{itemize}
+
+A házi feladat teljes forráskódja, beleértve a számolást, és a dokumentációt,
+megtekinthető az alábbi linken:
+\href{https://github.com/tibi1220/VEM-1SZHF}{https://github.com/tibi1220/VEM-1SZHF}
 
 \end{document}

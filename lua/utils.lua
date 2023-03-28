@@ -63,9 +63,9 @@ end
 
 M.fullKei = function()
   for i = 1, 7 do
-    tex.sprint([[\rmat{K}_]] .. i .. [[&=\begin{bmatrix}]])
-    M.printMatrix(V.Ke[i], 1e-16)
-    tex.sprint [[\end{bmatrix}\mathrm{\dfrac{N}{m}}]]
+    tex.sprint([[\rmat{K}_]] .. i .. [[&=\left[\begin{array}{*{4}{X{12.5mm}}}]])
+    M.printMatrix(V.Ke[i], 1e-6, 1e-6)
+    tex.sprint [[\end{array}\right] \cdot 10^6 \,\mathrm{N/m}]]
     if i == 7 then
       tex.sprint [[\text{.}]]
     else
@@ -76,7 +76,7 @@ end
 
 M.fullUei = function()
   for i = 1, 7 do
-    tex.sprint([[\rvec{U}_]] .. i .. [[&=&\begin{bmatrix}]])
+    tex.sprint([[\rvec{U}_]] .. i .. [[&=\left[\begin{array}{X{7mm}}]])
     tex.sprint(
       'U_'
         .. V.eDOF[i][1]
@@ -88,13 +88,13 @@ M.fullUei = function()
         .. V.eDOF[i][4]
         .. '}\\\\'
     )
-    tex.sprint [[\end{bmatrix} &=& \begin{bmatrix}]]
+    tex.sprint [[\end{array}\right] = \left[\begin{array}{X{20mm}}]]
     M.printMatrix(V.Ue[i], 1e-16)
-    tex.sprint [[\end{bmatrix}\mathrm{m} &=& 
+    tex.sprint [[\end{array}\right]\mathrm{m} = 
       \sisetup{exponent-mode = fixed, round-precision = 3} 
-      \begin{bmatrix}]]
+      \left[\begin{array}{X{10mm}}]]
     M.printMatrix(V.Ue[i], 1e-16, 1000)
-    tex.sprint [[\end{bmatrix}\mathrm{mm}]]
+    tex.sprint [[\end{array}\right]\mathrm{mm}]]
     if i == 7 then
       tex.sprint [[\text{.}]]
     else
@@ -124,14 +124,14 @@ M.printDOFMatrix = function()
     \begin{pmatrix}
       1 \\ 2 \\ 3 \\ 4 \\ 5 \\ 6 \\ 7
     \end{pmatrix}
-  } \end{array} ]]
+  }. \end{array} ]]
 end
 
-M.printK = function() M.printMatrix(V.K) end
+M.printK = function(mult) M.printMatrix(V.K, 1e-6, mult) end
 
-M.printKkond = function() M.printMatrix(V.Kkond) end
-M.printInverted = function() M.printMatrix(V.inverted) end
-M.printFkond = function() M.printMatrix(V.Fkond) end
+M.printKkond = function(mult) M.printMatrix(V.Kkond, 1e-6, mult) end
+M.printInverted = function(mult) M.printMatrix(V.inverted, 1e-16, mult) end
+M.printFkond = function(mult) M.printMatrix(V.Fkond, 1, mult) end
 M.printF = function(mult) M.printMatrix(V.F, 1e-3, mult) end
 M.printFcalc = function(mult) M.printMatrix(V.Fcalc, 1e-3, mult) end
 M.printFreacc = function(mult) M.printMatrix(V.Freacc, 1e-3, mult) end

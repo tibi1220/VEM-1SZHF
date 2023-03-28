@@ -12,6 +12,10 @@
 \newcommand{\uvec}[1]{\widehat{\mathbfit{#1}}}
 \newcommand{\rmat}[1]{\mathbf{#1}}
 
+\usepackage{array}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{X}[1]{>{$}x{#1}<{$}}
+
 \input{code}
 
 \begin{document}
@@ -60,7 +64,7 @@
           ..
         [[{$\rightarrow\quad\rmat{DOF}_{]]
           .. i ..
-        [[}= \begin{bmatrix}]]
+        [[}= \left[\begin{array}{*{3}{X{2.75mm}} X{4mm}}]]
       )
 
       for x=1,4 do
@@ -70,7 +74,7 @@
         end
       end
 
-      tex.sprint [[\end{bmatrix}$};\end{scope}]]
+      tex.sprint [[\end{array}\right]$};\end{scope}]]
 
       for x=1,4 do
         for y=1,4 do

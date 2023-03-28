@@ -45,12 +45,11 @@
     % A
     \draw
     ($(A)+(0,4.5mm)$) node[gdot](S) {} coordinate(H)
-    (S.south) -- ++(+2.25mm, 0) coordinate(X) -- (A)
-    (S.south) -- ++(-2.25mm, 0) coordinate(Y) -- (A)
+    (S.south) -- ++(+2.25mm, 0) -- (A)
+    (S.south) -- ++(-2.25mm, 0) -- (A)
     (S.north) -- ++(+3.50mm, 0) coordinate (SR)
     (S.north) -- ++(-3.50mm, 0) coordinate (SL)
     ;
-    \fill[white] (SL) rectangle ($(SR)+(0,1mm)$);
     \fill (SL) rectangle ($(SR)+(0,1mm)$);
 
     % C
@@ -61,7 +60,6 @@
     (S.east) -- ++(0, +3.50mm) coordinate (ST)
     (S.east) -- ++(0, -3.50mm) coordinate (SB)
     ;
-    \fill[white] (SB) rectangle ($(ST)+(1mm,0)$);
     \fill (SB) rectangle ($(ST)+(1mm,0)$);
 
     % D
@@ -70,7 +68,6 @@
     (D) -- ++(150:4mm) node(DT) {}
     (DB.south) -- (DT.north)
     ;
-    \fill[white] (DB.south) rectangle ($(DT.north)-(1mm,0)$);
     \fill (DB.south) rectangle ($(DT.north)-(1mm,0)$);
   \end{scope}
 
@@ -93,6 +90,10 @@
 
     \draw[-to, draw=orange, ultra thick] (H) -- ++(0,1.5) node[below left] {$y$};
     \draw[-to, draw=orange, ultra thick] (E) -- ++(1.5,0) node[below left] {$x$};
+
+    \draw[draw=white, ultra thick] (H) -- (A);
+    \draw[draw=white, ultra thick] (D) -- ++(-4mm,0);
+    \fill[white] (SL) rectangle ($(SR)+(0,1mm)$);
   \end{scope}
 \end{tikzpicture}
 \end{document}

@@ -1,4 +1,4 @@
-\documentclass{standalone}
+\documentclass[12pt]{standalone}
 
 \usepackage{tikz}
 \input{tikzset}
@@ -23,26 +23,17 @@
   ]
   \def\l{5.25mm}
   \def\d{4.25mm}
+  \def\vmult{1.2}
 
   % Joints
   \draw
   node[joint] (A) at (0,0) {1}
   node[joint] (B) at (\lv{a},0) {2}
   node[joint] (C) at (\lv{a}+\lv{c},0) {3}
-  node[joint] (D) at (0,-\lv{b}) {4}
-  node[joint] (E) at (\lv{c},-\lv{b}) {5}
+  node[joint] (D) at (0,-\lv{b}*\vmult) {4}
+  node[joint] (E) at (\lv{c},-\lv{b}*\vmult) {5}
   ;
 
-  % Rods
-  % \draw[ultra thick]
-  % (A) -- (B) node[rod] {1}
-  % (A) -- (D) node[rod] {2}
-  % (B) -- (C) node[rod] {3}
-  % (B) -- (D) node[rod] {4}
-  % (B) -- (E) node[rod] {5}
-  % (C) -- (E) node[rod] {6}
-  % (D) -- (E) node[rod] {7}
-  % ;
   % \begin{noindent}
   \begin{luacode*}
     local V = require 'lua.variables'
@@ -75,12 +66,12 @@
 
   \foreach \n/\i in {A/1,B/2,C/3,D/4,E/5} {
   \draw[-{Latex[round]}, red!40!gray, ultra thick] (\n.90) -- ++(0,\l)
-  node[below right=2mm, black, bgf] {$F_{y\i}$};
+  node[right=1mm, black, bgf, pos=.3] {$F_{y\i}$};
   \draw[-{Latex[round]}, red!40!gray, ultra thick] (\n.0) -- ++(\l,0)
-  node[above left=2mm, black, bgf] {$F_{x\i}$};
+  node[above=1mm, black, bgf, pos=1.1] {$F_{x\i}$};
 
   \draw[|-to, green!40!gray, ultra thick] ($(\n.180)-(0mm,0)$) -- ++(0,\d)
-  node[midway, left=1.5mm, black, bgf] {$V_{\i}$};
+  node[midway, left=1mm, black, bgf] {$V_{\i}$};
   \draw[|-to, green!40!gray, ultra thick] ($(\n.270)-(0,0mm)$) -- ++(\d,0)
   node[midway, below=1.5mm, black, bgf] {$U_{\i}$};
   }
