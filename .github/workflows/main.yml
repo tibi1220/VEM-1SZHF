@@ -1,0 +1,22 @@
+name: Build and Release LaTeX Document
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        id: checkout_repo
+        uses: actions/checkout@v3
+
+      - name: Compile LaTeX Document
+        id: compile_latex
+        uses: xu-cheng/latex-action/full@v1
+        with:
+          run: latexmk -r .latexmkrc main.tex
+
+      - name: Upload PDF file
+        id: upload_latex
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: build/main.pdf
