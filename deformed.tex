@@ -1,0 +1,50 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\input{tikzset}
+
+\input{code}
+
+\begin{document}
+\begin{tikzpicture}[thick]
+  \def\l{1cm}
+  \def\scale{5}
+
+  % Original
+  \begin{scope}[opacity=.3]
+    % Joints
+    \draw
+    node[dot] (A) at (0,0) {}
+    node[dot] (B) at (\lv{a},0) {}
+    node[dot] (C) at (\lv{a}+\lv{c},0) {}
+    node[dot] (D) at (0,-\lv{b}) {}
+    node[dot] (E) at (\lv{c},-\lv{b}) {}
+    ;
+
+    % Rods
+    \draw[ultra thick]
+    (A) -- (B) -- (C) -- (E) -- (D) -- (A)
+    (D) -- (B) -- (E)
+    ;
+  \end{scope}
+
+  % Deformed
+  \begin{scope}[]
+    % Joints
+    \draw
+    node[dot] (A) at (\scale*\lvmat{Ucalc}{1}{1} + 0             , \scale*\lvmat{Ucalc}{2}{1} + 0) {}
+    node[dot] (B) at (\scale*\lvmat{Ucalc}{3}{1} + \lv{a}        , \scale*\lvmat{Ucalc}{4}{1} + 0) {}
+    node[dot] (C) at (\scale*\lvmat{Ucalc}{5}{1} + \lv{a}+\lv{c} , \scale*\lvmat{Ucalc}{6}{1} + 0) {}
+    node[dot] (D) at (\scale*\lvmat{Ucalc}{7}{1} + 0             , \scale*\lvmat{Ucalc}{8}{1} - \lv{b}) {}
+    node[dot] (E) at (\scale*\lvmat{Ucalc}{9}{1} + \lv{c}        , \scale*\lvmat{Ucalc}{10}{1} - \lv{b}) {}
+    ;
+
+    % Rods
+    \draw[ultra thick]
+    (A) -- (B) -- (C) -- (E) -- (D) -- (A)
+    (D) -- (B) -- (E)
+    ;
+  \end{scope}
+
+\end{tikzpicture}
+\end{document}

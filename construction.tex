@@ -1,0 +1,98 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\input{tikzset}
+
+\input{code}
+
+\begin{document}
+\begin{tikzpicture}[thick]
+  \def\l{1cm}
+
+  % Joints
+  \draw
+  node[dot] (A) at (0,0) {}
+  node[dot] (B) at (\lv{a},0) {}
+  node[dot] (C) at (\lv{a}+\lv{c},0) {}
+  node[dot] (D) at (0,-\lv{b}) {}
+  node[dot] (E) at (\lv{c},-\lv{b}) {}
+
+  (A) node[below right] {$A$}
+  (B) node[below] {$B$}
+  (C) node[above left] {$C$}
+  (D) node[below right] {$D$}
+  (E) node[below left] {$E$}
+  ;
+
+  % Rods
+  \draw[ultra thick]
+  (A) -- (B) -- (C) -- (E) -- (D) -- (A)
+  (D) -- (B) -- (E)
+  ;
+
+  % Forces
+  \begin{scope}[ultra thick]
+    \draw[{Latex[round]}-, green!40!gray] (B) -- ++(0,\l)
+    node[left, midway, black] {$3F_1$};
+    \draw[-{Latex[round]}, green!40!gray] (E) -- ++(0,\l)
+    node[left, midway, black] {$F_1$};
+    \draw[{Latex[round]}-, green!40!gray] (C) -- ++(0,-\l)
+    node[left, midway, black] {$F_1$};
+  \end{scope}
+
+  % Pivot triangles
+  \begin{scope}[thick, pattern=north east lines]
+    % A
+    \draw
+    ($(A)+(0,4.5mm)$) node[gdot](S) {} coordinate(H)
+    (S.south) -- ++(+2.25mm, 0) coordinate(X) -- (A)
+    (S.south) -- ++(-2.25mm, 0) coordinate(Y) -- (A)
+    (S.north) -- ++(+3.50mm, 0) coordinate (SR)
+    (S.north) -- ++(-3.50mm, 0) coordinate (SL)
+    ;
+    \fill[white] (SL) rectangle ($(SR)+(0,1mm)$);
+    \fill (SL) rectangle ($(SR)+(0,1mm)$);
+
+    % C
+    \draw
+    ($(C)+(4.5mm,0)$) node[gdot](S) {}
+    (S.west) -- ++(0, +2.25mm) -- (C)
+    (S.west) -- ++(0, -2.25mm) -- (C)
+    (S.east) -- ++(0, +3.50mm) coordinate (ST)
+    (S.east) -- ++(0, -3.50mm) coordinate (SB)
+    ;
+    \fill[white] (SB) rectangle ($(ST)+(1mm,0)$);
+    \fill (SB) rectangle ($(ST)+(1mm,0)$);
+
+    % D
+    \draw
+    (D) -- ++(210:4mm) node(DB) {}
+    (D) -- ++(150:4mm) node(DT) {}
+    (DB.south) -- (DT.north)
+    ;
+    \fill[white] (DB.south) rectangle ($(DT.north)-(1mm,0)$);
+    \fill (DB.south) rectangle ($(DT.north)-(1mm,0)$);
+  \end{scope}
+
+  % Distances
+  \begin{scope}[on background layer]
+    \foreach \i in {A,B,C}{
+        \draw[dashed, gray, thick] (\i) -- ++(0,+1.55cm);
+      }
+    \foreach \i in {A,D}{
+        \draw[dashed, gray, thick] (\i) -- ++(-1.35cm,0);
+      }
+    \foreach \i in {D,E}{
+        \draw[dashed, gray, thick] (\i) -- ++(0,-1.35cm);
+      }
+
+    \draw[dim] ($(A)+(0,1.4cm)$) -- ++($(B)-(A)$) node[midway, above] {$a$};
+    \draw[dim] ($(B)+(0,1.4cm)$) -- ++($(C)-(B)$) node[midway, above] {$c$};
+    \draw[dim] ($(D)-(0,1.2cm)$) -- ++($(E)-(D)$) node[midway, above] {$c$};
+    \draw[dim] ($(A)-(1.2cm,0)$) -- ++($(D)-(A)$) node[midway, left] {$b$};
+
+    \draw[-to, draw=orange, ultra thick] (H) -- ++(0,1.5) node[below left] {$y$};
+    \draw[-to, draw=orange, ultra thick] (E) -- ++(1.5,0) node[below left] {$x$};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,96 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\input{tikzset}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{unicode-math}
+
+\newcommand\iu{\mathbf{j}}
+\newcommand{\rvec}[1]{\mathbfit{#1}}
+\newcommand{\uvec}[1]{\widehat{\mathbfit{#1}}}
+\newcommand{\rmat}[1]{\mathbf{#1}}
+
+\input{code}
+
+\begin{document}
+\begin{tikzpicture}[thick]
+  \def\lg{8mm}
+  \def\str{1.2}
+
+  \foreach \i in {0,1,...,9}{
+      \foreach \j in {0,1,...,9}{
+          \coordinate (n\i\j) at (\i*\lg,-\j*\lg);
+          \node[rectangle,draw,minimum width=\lg,minimum height=\lg] at (n\i\j) {};
+        }
+    }
+
+  \foreach \i in {1,2,...,5} {
+      \node at (-\lg*\str, -\i*\lg*2 + \lg*2) {$U_\i$};
+      \node at (-\lg*\str, -\i*\lg*2 + \lg) {$V_\i$};
+
+      \node at (\i*\lg*2 - \lg*2, \lg*\str) {$U_\i$};
+      \node at (\i*\lg*2 - \lg,   \lg*\str) {$V_\i$};
+    }
+
+  % \begin{noindent}
+  \begin{luacode*}
+    local D = require('lua.variables').eDOF
+
+    local colors = { 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow', 'gray' }
+
+    for i=7,1,-1 do
+      local dof = D[i]
+
+      tex.sprint(
+        [[\begin{scope}[xshift=-9*\lg*\str, yshift=-]]
+          .. i - 1 ..
+        [[*12mm] \node[rectangle, minimum width=\lg, minimum height=\lg, draw=]]
+          .. colors[i] ..
+        [[,fill=]]
+          .. colors[i] ..
+        [[!10]{]]
+          .. i ..
+        [[};]]
+      )
+
+      tex.sprint(
+        [[\node[text width=60mm, align=left] at (3.85,0)]] 
+          ..
+        [[{$\rightarrow\quad\rmat{DOF}_{]]
+          .. i ..
+        [[}= \begin{bmatrix}]]
+      )
+
+      for x=1,4 do
+        tex.sprint(dof[x])
+        if x~=4 then
+          tex.sprint("&")
+        end
+      end
+
+      tex.sprint [[\end{bmatrix}$};\end{scope}]]
+
+      for x=1,4 do
+        for y=1,4 do
+          tex.sprint(
+            [[ \node at (n]]
+              .. dof[x]-1 .. dof[y]-1 ..
+            [[)[rectangle, minimum width=]]
+              .. (i + 3) * 0.7 ..
+            [[*1mm, minimum height=]]
+              .. (i + 3) * 0.7 ..
+            [[*1mm, draw=]]
+              .. colors[i] ..
+            [[,fill=]]
+              .. colors[i] ..
+            [[!10]{};]]
+          )
+        end
+      end
+    end
+  \end{luacode*}
+  % \end{noindent}
+\end{tikzpicture}
+\end{document}

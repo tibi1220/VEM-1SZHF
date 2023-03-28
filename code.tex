@@ -1,0 +1,17 @@
+\usepackage{luacode}
+% noindent
+\begin{luacode*}
+  utils = require 'lua.utils' 
+  variables = require "lua.variables"
+\end{luacode*}
+% indent
+
+\usepackage{xargs}
+\newcommandx{\silv}[3][3=]{\directlua{utils.silv("#1", "#2", "#3")}}
+\newcommandx{\sivec}[4][4=]{\directlua{utils.silv1D("#1", "#2", "#3", "#4")}}
+\newcommandx{\simat}[5][5=]{\directlua{utils.silv2D("#1", "#2", "#3", "#4", "#5")}}
+\newcommandx{\siten}[6][6=]{\directlua{utils.silv3D("#1", "#2", "#3", "#4", "#5", "#6")}}
+\newcommand{\lv}[1]{\directlua{utils.lv("#1")}}
+\newcommand{\lvmat}[3]{\directlua{utils.lv2D("#1", "#2", "#3")}}
+\newcommandx{\lvmth}[6][4=,5=,6=]{\directlua{utils.lv2DTD("#1", "#2", "#3", "#4", "#5", "#6")}}
+% \renewcommandx{\num}[2][2=]{\directlua{utils.silv("#1", '', "#2")}}
