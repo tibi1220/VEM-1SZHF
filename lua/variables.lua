@@ -190,16 +190,12 @@ local code_3 = 1
 local code_4 = 2
 
 -- Base params
-local E = 150000 -- MPa
-local a = 3 -- mm
-local d = 50 -- mm
-local b = 1.3 -- m
-
-local F_1 = 130000 -- N
-local c = 6 -- m
-
--- local F_1 = 210000 -- N
--- local c = 4 -- m
+local E = ({ 150, 170, 190, 210 })[code_2] * 1000 -- MPa
+local a = ({ 3, 2.5, 2, 1.5 })[code_2] -- mm
+local d = ({ 50, 45, 40, 35 })[code_3] -- mm
+local b = ({ 1.3, 1.6, 1.9, 2.2 })[code_3] -- m
+local F_1 = ({ 90, 130, 170, 210 })[code_4] * 1000 -- N
+local c = ({ 7, 6, 5, 4 })[code_4] -- m
 
 function Kef(Ai, Ei, Li, ai)
   local C = math.cos
@@ -383,6 +379,8 @@ for i = 1, 7 do
 
   Ne[i] = Fe[i][3][1] * cos(alpha[i][1]) + Fe[i][4][1] * sin(alpha[i][1])
 end
+
+print(A)
 
 -- Return variables
 return {
