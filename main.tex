@@ -100,7 +100,7 @@ alapján a szerkezetet jellemző adatok:
 \end{multicols}
 
 A megadott adatok alapján a szerkezetről készített méretarányos vázlat az
-\ref{fig:construction}. ábrán látható. A lapon mért $\SI{1.5}{mm}$ távolság
+\ref{fig:construction}. ábrán látható. A lapon mért $\SI{1.5}{cm}$ távolság
 a valóságban $\SI{1}{m}$-nek felel meg.
 
 \begin{figure}[H]
@@ -273,24 +273,22 @@ A globális merevségi mátrix tehát az alábbi alakot veszi fel:
 
 A merevségi egyenlet felírásához írjuk fel paraméteresen a globális csomóponti
 elmozdulásvektort, illetve a globális csomóponti terhelésvektort:
-\begin{equation}
-  \begin{array}{r c}
-    \rvec{U} = & \left[ \begin{array}{*{10}{X{6mm}}}
-                            U_1 & V_1 & U_2 & V_2 & U_3 & V_3 & U_4 & V_4 & U_5 & V_5
-                          \end{array}
-      \right]^\mathsf{T}\text{,}
-    \\[2mm]
-    \rvec{F} = & \left[ \begin{array}{*{10}{X{6mm}}}
-                            F_{1x} & F_{1y} & F_{2x} & F_{2y} & F_{3x} & F_{3y} & F_{4x} & F_{4y} & F_{5x} & F_{5y}
-                          \end{array}
-      \right]^\mathsf{T}.
-  \end{array}
-  \label{eq:UF}
-\end{equation}
+\begin{align}
+  \rvec{U} = & \left[ \begin{array}{*{10}{X{6mm}}}
+                          U_1 & V_1 & U_2 & V_2 & U_3 & V_3 & U_4 & V_4 & U_5 & V_5
+                        \end{array}
+    \right]^\mathsf{T}\text{,}
+  \\[2mm]
+  \rvec{F} = & \left[ \begin{array}{*{10}{X{6mm}}}
+                          F_{1x} & F_{1y} & F_{2x} & F_{2y} & F_{3x} & F_{3y} & F_{4x} & F_{4y} & F_{5x} & F_{5y}
+                        \end{array}
+    \right]^\mathsf{T}.
+\end{align}
 
-A kényszerek ismeretében tudjuk, hogy az (1)-es csomópont elmozdulása $y$,
-(3)-as csomópont elmozdulása $x$, a (4)-es csomópont elmozdulása pedig $x$
-és $y$ irányban is gátolt, vagyis: $V_1 = U_3 = U_4 = V_4 = 0$.
+A kényszerek ismeretében tudjuk, hogy az (1)-es csomópont elmozdulása $y$
+irányban, a (3)-as csomópont elmozdulása $x$ irányban, a (4)-es csomópont
+elmozdulása pedig $x$ és $y$ irányban is gátolt, vagyis:
+$V_1 = U_3 = U_4 = V_4 = 0$.
 Behelyettesítve:
 \begin{equation}
   \rvec U = \left[\begin{array}{*{10}{X{6mm}}}
@@ -340,10 +338,10 @@ mátrix-invertálással megoldható, vagyis:
   \underbrace{\begin{bmatrix}
       \directlua{utils.printInverted()}
     \end{bmatrix}}_{\widehat{\rmat K}^{-1}}
-  \sifigures{3}
+  \siplaces{1}
   \underbrace{\begin{bmatrix}
-      \directlua{utils.printFkond()}
-    \end{bmatrix}}_{\widehat{\rvec F}}
+      \directlua{utils.printFkond(0.00001)}
+    \end{bmatrix} 10^5}_{\widehat{\rvec F}}
   .
   \label{eq:inverted}
 \end{equation}
@@ -488,8 +486,8 @@ kapcsolatot:
 A feszültségek numerikusan:
 \begin{multicols}{3}
   \begin{itemize}
-    \siplaces{2}
     \item $\sigma_1 = \sigma_2 = \SI{0}{MPa}$,
+          \siplaces{2}
     \item $\sigma_3 = \sivec{sigma}{MPa}{3}$,
     \item $\sigma_4 = \sivec{sigma}{MPa}{4}$,
     \item $\sigma_5 = \sivec{sigma}{MPa}{5}$,

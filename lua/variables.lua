@@ -389,8 +389,6 @@ for i = 1, 7 do
   Ne[i] = Fe[i][3][1] * cos(alpha[i][1]) + Fe[i][4][1] * sin(alpha[i][1])
 end
 
-print(A)
-
 -- Return variables
 return {
   -- Codes
