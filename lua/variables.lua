@@ -339,7 +339,7 @@ for i = 1, 10 do
     Fcalc[i][1] = Fcalc[i][1] + K[j][i] * Ucalc[j][1]
   end
 
-  Freacc[i][1] = F[i][1] - Fcalc[i][1]
+  Freacc[i][1] = Fcalc[i][1] - F[i][1]
 end
 
 -- Elem elmozdulas
