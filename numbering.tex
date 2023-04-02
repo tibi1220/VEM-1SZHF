@@ -14,16 +14,16 @@
 \begin{document}
 \begin{tikzpicture}[
     thick,
-    scale=1.6,
+    scale=1.5,
     bgf/.style={
         inner sep=0em,
         outer sep=0em,
         fill=white
       },
   ]
-  \def\l{5.25mm}
-  \def\d{4.25mm}
-  \def\vmult{1.2}
+  \def\l{6mm}
+  \def\d{6mm}
+  \def\vmult{\lv{vmult}}
 
   % Joints
   \draw
@@ -76,5 +76,10 @@
   node[midway, below=1.5mm, black, bgf] {$U_{\i}$};
   }
 
+  \begin{scope}[on background layer]
+    % Coord system
+    \draw[-to, draw=orange, ultra thick] (H) -- ++(0,1.2) node[below left] {$y$};
+    \draw[-to, draw=orange, ultra thick] (E) -- ++(2.2,0) node[below left] {$x$};
+  \end{scope}
 \end{tikzpicture}
 \end{document}

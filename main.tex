@@ -72,6 +72,10 @@
 
 \DeclareMathOperator\atann{atan2}
 
+\newcommand{\sifigures}[1]{\sisetup{exponent-mode = fixed, round-mode=figures, round-precision=#1}}
+\newcommand{\siplaces}[1]{\sisetup{exponent-mode = fixed, round-mode=places, round-precision=#1}}
+\newcommand{\sisci}{\sisetup{exponent-mode = scientific}}
+
 % Document begins here
 \begin{document}
 
@@ -96,7 +100,7 @@ alapján a szerkezetet jellemző adatok:
 \end{multicols}
 
 A megadott adatok alapján a szerkezetről készített méretarányos vázlat az
-\ref{fig:construction}. ábrán látható. A lapon mért $\SI{1}{mm}$ távolság
+\ref{fig:construction}. ábrán látható. A lapon mért $\SI{1.5}{mm}$ távolság
 a valóságban $\SI{1}{m}$-nek felel meg.
 
 \begin{figure}[H]
@@ -121,6 +125,52 @@ hozzárendelt sorszámokat a \ref{fig:numbering}. ábra tartalmazza.
   \caption{A csomópontok és rudak számozása}
   \label{fig:numbering}
 \end{figure}
+
+% A \ref{fig:numbering}. ábrán található erő-, és elmozdulás-komponenseket
+% szervezzük vektorokba. A globális csomóponti elmozdulásvektor és a globális
+% csomóponti terhelésvektor ekkor az alábbi alakot veszi fel:
+
+A csomópontok koordinátáit az \ref{table:U}. táblázat tartalmazza.
+\begin{table}[H]
+  \def\arraystretch{1.1}
+  \centering
+  \caption{A csomópontok koordinátái}
+  \begin{tabular}{| c || X{1cm} | X{1cm} |}
+    \hline
+    Csp. & x \,[\text{m}] & y \,[\text{m}]
+    \\ \hline \hline
+    1    & \SI{0}{m}      & \silv{b}{m}
+    \\ \hline
+    2    & \silv{a}{m}    & \silv{b}{m}
+    \\ \hline
+    3    & \silv{e}{m}    & \silv{b}{m}
+    \\ \hline
+    4    & \SI{0}{m}      & \SI{0}{m}
+    \\ \hline
+    5    & \silv{c}{m}    & \SI{0}{m}
+    \\ \hline
+  \end{tabular}
+  \label{table:U}
+\end{table}
+
+Az egyes elemekhez tartozó csomópontokat a \ref{table:lok}. táblázat írja le.
+\begin{table}[H]
+  \def\arraystretch{1.1}
+  \centering
+  \caption{Elem -- csomópont összerendelések}
+  \begin{tabular}{| c || c | c |}
+    \hline
+    Elem & 1. csp & 2. csp \\ \hline \hline
+    1    & 1      & 2      \\ \hline
+    2    & 1      & 4      \\ \hline
+    3    & 2      & 3      \\ \hline
+    4    & 2      & 4      \\ \hline
+    5    & 2      & 5      \\ \hline
+    6    & 3      & 5      \\ \hline
+    7    & 4      & 5      \\ \hline
+  \end{tabular}
+  \label{table:lok}
+\end{table}
 
 Határozzuk meg először az elemi merevségi mátrixokat. Egy ilyen mátrix 2D-s
 húzott-nyomott rudak esetén az alábbi alakban írhatóak fel:
@@ -182,20 +232,12 @@ a többi elemé pedig az $\atann(y; x)$ függvénnyel számítható:
 \end{multicols}
 
 Az egyes elemek merevségi mátrixai ezen információk alapján már számíthatóak:
-\sisetup{
-  exponent-mode = scientific,
-  round-mode = figures,
-  round-precision = 4
-}
-\begin{equation}
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 4
-  }
-  \begin{split}
-    \directlua{utils.fullKei()}
-  \end{split}
-\end{equation}
+\bgroup
+\siplaces{2}
+\begin{align}
+  \directlua{utils.fullKei()}
+\end{align}
+\egroup
 
 Öt csomópontunk van, melyek egyenként két-két szabadsági fokkal rendelkeznek.
 ($x$ és $y$ irányú elmozdulás) Ez összesen 10 szabadsági fokot jelent.
@@ -218,14 +260,8 @@ tartozó helyhez rendeljük hozzá. Ezt a \ref{fig:table}. ábra szemlélteti.
 \end{figure}
 
 A globális merevségi mátrix tehát az alábbi alakot veszi fel:
-\sisetup{
-  round-precision = 2
-}
 \begin{equation}
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 5
-  }
+  \siplaces{2}
   \scriptsize{
     \rmat K = \begin{bmatrix}
       \directlua{utils.printK(1e-6)}
@@ -280,6 +316,7 @@ Ezen adatok ismeretében már fel tudjuk írni a kondenzált merevségi egyenlet
 melyet úgy kapunk meg, hogy az elmozdulásban gátolt irányokhoz tartozó sorokat
 és oszlopokat töröljük az eredeti, globális merevségi egyenletből:
 \begin{equation}
+  \sifigures{2} \sisci{}
   \underbrace{\begin{bmatrix}
       \directlua{utils.printKkond()}
     \end{bmatrix}}_{\widehat{\rmat K}}
@@ -287,10 +324,7 @@ melyet úgy kapunk meg, hogy az elmozdulásban gátolt irányokhoz tartozó soro
       U_1 \\ U_2 \\ V_2 \\ V_3 \\ U_5 \\ V_5
     \end{bmatrix}}_{\widehat{\rvec U}}
   =
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 3
-  }
+  \sifigures{3}
   \underbrace{\begin{bmatrix}
       \directlua{utils.printFkond()}
     \end{bmatrix}}_{\widehat{\rvec F}}
@@ -301,14 +335,12 @@ melyet úgy kapunk meg, hogy az elmozdulásban gátolt irányokhoz tartozó soro
 Mivel $\widehat{\rmat K}$ mátrix reguláris, ezért az egyenletrendszer
 mátrix-invertálással megoldható, vagyis:
 \begin{equation}
+  \sifigures{2} \sisci{}
   \widehat{\rvec U} =
   \underbrace{\begin{bmatrix}
       \directlua{utils.printInverted()}
     \end{bmatrix}}_{\widehat{\rmat K}^{-1}}
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 3
-  }
+  \sifigures{3}
   \underbrace{\begin{bmatrix}
       \directlua{utils.printFkond()}
     \end{bmatrix}}_{\widehat{\rvec F}}
@@ -317,13 +349,13 @@ mátrix-invertálással megoldható, vagyis:
 \end{equation}
 
 Az egyenlet megoldása numerikusan:
-\sisetup{round-precision = 3}
 \begin{equation}
+  \sifigures{3} \sisci\
   \widehat{\rvec U} = \begin{bmatrix}
     \directlua{utils.printUkond(1)}
   \end{bmatrix} \, \mathrm{m}
   =
-  \sisetup{exponent-mode = fixed}
+  \siplaces{2}
   \begin{bmatrix}
     \directlua{utils.printUkond(1000)}
   \end{bmatrix} \, \mathrm{mm}.
@@ -332,14 +364,12 @@ Az egyenlet megoldása numerikusan:
 
 A globális elmozdulásvektorba visszahelyettesítve:
 \begin{equation}
+  \sifigures{3} \sisci\
   {\rvec U} = \begin{bmatrix}
     \directlua{utils.printUcalc(1)}
   \end{bmatrix} \, \mathrm{m}
   =
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 3
-  }
+  \siplaces{2}
   \begin{bmatrix}
     \directlua{utils.printUcalc(1000)}
   \end{bmatrix} \, \mathrm{mm}.
@@ -354,8 +384,8 @@ A globális elmozdulásvektorba visszahelyettesítve:
 \label{sec:A deformált alak ábrázolása}
 
 Az $\rvec U$ vektor ismeretében már ábrázolhatjuk a csomópontok új koordinátáit.
-A \ref{fig:deformed}. ábra az elmozdulások ötszörös nagyításával szemlélteti a
-szerkezet deformált alakját.
+A \ref{fig:deformed}. ábra az elmozdulások háromszoros nagyításával szemlélteti
+a szerkezet deformált alakját.
 
 \begin{figure}[H]
   \centering
@@ -374,11 +404,8 @@ szerkezet deformált alakját.
 Ha a merevségi egyenletbe visszahelyettesítjük a már ismert elmozdulási vektort,
 akkor megkaphatjuk a terhelési vektort numerikusan:
 \begin{equation}
+  \sifigures{3}
   \rvec F = \rmat K \rvec U =
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 3
-  }
   \begin{bmatrix}
     \directlua{utils.printFcalc(1)}
   \end{bmatrix}
@@ -396,17 +423,12 @@ akkor megkaphatjuk a terhelési vektort numerikusan:
 
 A reakcióerők tehát a következőek:
 \begin{equation}
-  \sisetup{
-    exponent-mode = fixed,
-    round-precision = 3
-  }
-  \begin{split}
-    F_{3x} &= \simat{Fcalc}{N}{5}{1}\text,
-    \\
-    F_{4x} &= \simat{Fcalc}{N}{7}{1}\text,
-    \\
-    F_{4y} &= \simat{Fcalc}{N}{8}{1}.
-  \end{split}
+  \sifigures{3}
+  F_{3x} = \simat{Fcalc}{N}{5}{1}\text,
+  \qquad\qquad
+  F_{4x} = \simat{Fcalc}{N}{7}{1}\text,
+  \qquad\qquad
+  F_{4y} = \simat{Fcalc}{N}{8}{1}.
 \end{equation}
 
 % section sec:A reakcióerők meghatározása (end)
@@ -418,11 +440,12 @@ A reakcióerők tehát a következőek:
 
 Határozzuk meg először az elemekhez tartozó lokális elmozdulásvektorokat,
 melyek elemei a globális elmozdulásvektor megfelelő elemeivel egyeznek meg:
-\begin{equation}
-  \begin{aligned}
-    \directlua{utils.fullUei()}
-  \end{aligned}
-\end{equation}
+\bgroup
+\allowdisplaybreaks
+\begin{alignat}{9}
+  \directlua{utils.fullUei {}}
+\end{alignat}
+\egroup
 
 Az alakváltozások számításához definiáljuk a $\rvec B$ sorvektort az alábbi módon:
 \begin{equation}
@@ -442,13 +465,10 @@ az alábbi egyenlettel írható fel:
   \label{eq:eps}
 \end{equation}
 
-\sisetup{
-  exponent-mode = fixed,
-  round-precision = 4
-}
 Ezen értékek numerikusan:
 \begin{multicols}{3}
   \begin{itemize}
+    \siplaces{6}
     \item $\varepsilon_1 = \varepsilon_2 = 0$,
     \item $\varepsilon_3 = \sivec{epsilon}{}{3}[6]$,
     \item $\varepsilon_4 = \sivec{epsilon}{}{4}[6]$,
@@ -465,10 +485,10 @@ kapcsolatot:
   \label{eq:Hooke}
 \end{equation}
 
-\sisetup{round-precision = 4}
 A feszültségek numerikusan:
 \begin{multicols}{3}
   \begin{itemize}
+    \siplaces{2}
     \item $\sigma_1 = \sigma_2 = \SI{0}{MPa}$,
     \item $\sigma_3 = \sivec{sigma}{MPa}{3}$,
     \item $\sigma_4 = \sivec{sigma}{MPa}{4}$,
@@ -480,9 +500,9 @@ A feszültségek numerikusan:
 
 % section section name (end)
 
-% \clearpage
+\clearpage
 
-% \tableofcontents
+\tableofcontents
 
 \vfill
 

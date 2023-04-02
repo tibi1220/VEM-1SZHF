@@ -6,8 +6,8 @@
 \input{code}
 
 \begin{document}
-\begin{tikzpicture}[thick]
-  \def\l{1cm}
+\begin{tikzpicture}[thick, scale=1.5]
+  \def\l{8mm}
 
   % Joints
   \draw
@@ -17,11 +17,11 @@
   node[dot] (D) at (0,-\lv{b}) {}
   node[dot] (E) at (\lv{c},-\lv{b}) {}
 
-  (A) node[below right] {$A$}
-  (B) node[below] {$B$}
-  (C) node[above left] {$C$}
-  (D) node[below right] {$D$}
-  (E) node[below left] {$E$}
+  (A) node[below right=1mm] {$A$}
+  (B) node[below=1mm] {$B$}
+  (C) node[above left=1mm] {$C$}
+  (D) node[below right=1mm] {$D$}
+  (E) node[below left=1mm] {$E$}
   ;
 
   % Rods
@@ -41,7 +41,7 @@
   \end{scope}
 
   % Pivot triangles
-  \begin{scope}[thick, pattern=north east lines]
+  \begin{scope}[ultra thick, pattern=north east lines]
     % A
     \draw
     ($(A)+(0,4.5mm)$) node[gdot](S) {} coordinate(H)
@@ -74,22 +74,22 @@
   % Distances
   \begin{scope}[on background layer]
     \foreach \i in {A,B,C}{
-        \draw[dashed, gray, thick] (\i) -- ++(0,+1.55cm);
+        \draw[dashed, gray, thick] (\i) -- ++(0,+1.35cm);
       }
     \foreach \i in {A,D}{
-        \draw[dashed, gray, thick] (\i) -- ++(-1.35cm,0);
+        \draw[dashed, gray, thick] (\i) -- ++(-1.05cm,0);
       }
     \foreach \i in {D,E}{
-        \draw[dashed, gray, thick] (\i) -- ++(0,-1.35cm);
+        \draw[dashed, gray, thick] (\i) -- ++(0,-1.05cm);
       }
 
-    \draw[dim] ($(A)+(0,1.4cm)$) -- ++($(B)-(A)$) node[midway, above] {$a$};
-    \draw[dim] ($(B)+(0,1.4cm)$) -- ++($(C)-(B)$) node[midway, above] {$c$};
-    \draw[dim] ($(D)-(0,1.2cm)$) -- ++($(E)-(D)$) node[midway, above] {$c$};
-    \draw[dim] ($(A)-(1.2cm,0)$) -- ++($(D)-(A)$) node[midway, left] {$b$};
+    \draw[dim] ($(A)+(0,1.25cm)$) -- ++($(B)-(A)$) node[midway, above] {$a$};
+    \draw[dim] ($(B)+(0,1.25cm)$) -- ++($(C)-(B)$) node[midway, above] {$c$};
+    \draw[dim] ($(D)-(0,0.95cm)$) -- ++($(E)-(D)$) node[midway, above] {$c$};
+    \draw[dim] ($(A)-(0.95cm,0)$) -- ++($(D)-(A)$) node[midway, left] {$b$};
 
-    \draw[-to, draw=orange, ultra thick] (H) -- ++(0,1.5) node[below left] {$y$};
-    \draw[-to, draw=orange, ultra thick] (E) -- ++(1.5,0) node[below left] {$x$};
+    \draw[-to, draw=orange, ultra thick] (H) -- ++(0,1.2) node[below left] {$y$};
+    \draw[-to, draw=orange, ultra thick] (E) -- ++(1.2,0) node[below left] {$x$};
 
     \draw[draw=white, ultra thick] (H) -- (A);
     \draw[draw=white, ultra thick] (D) -- ++(-4mm,0);

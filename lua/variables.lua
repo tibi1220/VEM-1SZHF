@@ -264,9 +264,18 @@ local alpha = {
   { atan2(0, c) },
 }
 
-local beta = zeros(7, 1)
+local vmult = 2 / b
+local beta = {
+  { atan2(0 * vmult, a) },
+  { atan2(-b * vmult, 0) },
+  { atan2(0 * vmult, c) },
+  { atan2(-b * vmult, -a) },
+  { atan2(-b * vmult, c - a) },
+  { atan2(-b * vmult, -a) },
+  { atan2(0 * vmult, c) },
+}
 for i = 1, 7 do
-  beta[i][1] = alpha[i][1] / PI * 180
+  beta[i][1] = beta[i][1] / PI * 180
 end
 
 -- Elem merevsegi
@@ -427,4 +436,7 @@ return {
 
   epsilon = epsilon,
   sigma = sigma,
+
+  vmult = vmult,
+  e = a + c,
 }

@@ -63,7 +63,7 @@ end
 
 M.fullKei = function()
   for i = 1, 7 do
-    tex.sprint([[\rmat{K}_]] .. i .. [[&=\left[\begin{array}{*{4}{X{12.5mm}}}]])
+    tex.sprint([[\rmat{K}_]] .. i .. [[&=\left[\begin{array}{*{4}{X{14mm}}}]])
     M.printMatrix(V.Ke[i], 1e-6, 1e-6)
     tex.sprint [[\end{array}\right] \cdot 10^6 \,\mathrm{N/m}]]
     if i == 7 then
@@ -88,11 +88,11 @@ M.fullUei = function()
         .. V.eDOF[i][4]
         .. '}\\\\'
     )
-    tex.sprint [[\end{array}\right] = \left[\begin{array}{X{20mm}}]]
+    tex.sprint [[\end{array}\right] = \sifigures{3}\sisci{}\left[\begin{array}{X{20mm}}]]
     M.printMatrix(V.Ue[i], 1e-16)
     tex.sprint [[\end{array}\right]\mathrm{m} = 
-      \sisetup{exponent-mode = fixed, round-precision = 3} 
-      \left[\begin{array}{X{10mm}}]]
+      \siplaces{2}
+      \left[\begin{array}{X{12mm}}]]
     M.printMatrix(V.Ue[i], 1e-16, 1000)
     tex.sprint [[\end{array}\right]\mathrm{mm}]]
     if i == 7 then
@@ -128,6 +128,7 @@ M.printDOFMatrix = function()
 end
 
 M.printK = function(mult) M.printMatrix(V.K, 1e-6, mult) end
+M.printDOF = function() M.printMatrix(V.eDOF, 1e-6, 1) end
 
 M.printKkond = function(mult) M.printMatrix(V.Kkond, 1e-6, mult) end
 M.printInverted = function(mult) M.printMatrix(V.inverted, 1e-16, mult) end
